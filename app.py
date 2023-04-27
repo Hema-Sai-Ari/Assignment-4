@@ -1,7 +1,7 @@
 import json
-import re
+import re   #regular expressions
 import sqlite3
-from flask import Flask, flash, get_flashed_messages, jsonify, redirect, render_template, request, session, url_for
+from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
 
 app = Flask(__name__)
 app.secret_key = 'your secret key'
@@ -11,10 +11,10 @@ sqlite_connection.execute('CREATE TABLE IF NOT EXISTS Cart (id INTEGER PRIMARY K
 
 @app.route('/')
 def index():
-    session.pop('_flashes', None)
+    session.pop('_flashes', None) #to remove the already existing session messages
     logged_in = False
     if 'user_info' in session:
-        conn = sqlite3.connect("shopping.db")
+        conn = sqlite3.connect("shopping.db") 
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM Customer WHERE id = ? ', (int(session.get('user_info')), ))
         user = cursor.fetchone()
