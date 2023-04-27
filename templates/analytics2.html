@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <!-- Link to Font Awesome CSS file -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Popper JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    footer {
+      margin-top: auto;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      float: left;
+      height: 50px;
+      padding: 5px 5px 5px 16px;
+    }
+
+    .navbar-dark .navbar-nav .nav-link {
+      color: aliceblue;
+    }
+
+    .display-4 {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .lead {
+      font-size: 1.5rem;
+      font-weight: normal;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top">
+    <!-- USF Bulls Store brand -->
+    <img class="logo" src="{{ url_for('static', filename='./images/USF-logo.jpg') }}" alt="logo" />
+    <a class="navbar-brand" href="/">USF Bulls Store</a>
+    <!-- Hamburger button for small screens -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <!-- About button -->
+        <li class="nav-item">
+          <a class="nav-link" href="/"><i class="fa fa-home"></i>Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/about">About</a>
+        </li>
+        {% if not 'user_info' in session %}
+        <!-- Sign In button -->
+        <li class="nav-item">
+          <a class="nav-link" href="/signin">Sign In</a>
+        </li>
+        {% endif %}
+        <!-- Sign In button -->
+        <li class="nav-item">
+          <a class="nav-link" href="/analytics">Analytics</a>
+        </li>
+        <!-- Cart button with icon -->
+        <li class="nav-item">
+          <a class="nav-link cart" href="/cart">
+            Cart <i class="fas fa-shopping-cart"></i>
+            <span class="item-count"></span>
+          </a>
+        </li>
+        {% if 'user_info' in session %}
+        <li class="nav-item">
+          <i class="fa fa-user-circle"></i>
+          <a class="nav-link">{{user[1]}}{{" "}}{{user[2]}}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+  <div class="container mt-5 py-5 text-center">
+    <h1 class="display-4 mb-0">Analytics Page</h1>
+    <p class="lead">Take a peek at our monthly sales!</p>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="salesChart"></canvas>
+  </div>
+
+  <footer class="bg-success py-3">
+    <div class="container text-center">
+      <p class="mb-0 text-white">&copy; 2023 USF Bulls Store</p>
+    </div>
+  </footer>
+</body>
+
+<script>
+  const data = {
+    labels: [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ],
+    datasets: [
+      {
+        label: "Men Clothing Monthly Sales",
+        data: [
+          1500, 1800, 2100, 1700, 1900, 1500, 3200, 3570, 2800, 4000, 7350,
+          4500,
+        ],
+        backgroundColor: "rgba(54, 162, 235, 0.2)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: "Women clothing Monthly Sales",
+        data: [
+          500, 770, 1700, 1790, 1813, 1521, 1412, 1570, 991, 2222, 5555, 1111,
+        ],
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgba(255, 99, 132, 1)",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const config = {
+    type: "bar",
+    data: data,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top",
+        },
+        title: {
+          display: true,
+          text: "Monthly Sales",
+        },
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  };
+
+  var salesChart = new Chart(document.getElementById("salesChart"), config);
+</script>
+
+</html>

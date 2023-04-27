@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <!-- Link to Font Awesome CSS file -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Popper JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    footer {
+      margin-top: auto;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .card {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+        0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .card img {
+      height: 200px;
+      object-fit: contain;
+      max-width: 100%;
+    }
+
+    .about-title {
+      font-family: "Times New Roman", Times, serif;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      float: left;
+      height: 50px;
+      padding: 5px 5px 5px 16px;
+    }
+
+    .navbar-dark .navbar-nav .nav-link {
+      color: aliceblue;
+    }
+
+    .github-button {
+      display: flex;
+      justify-content: center;
+      margin: 10px;
+    }
+
+    .github {
+      color: white;
+      background-color: green;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top">
+    <!-- USF Bulls Store brand -->
+    <img class="logo" src="{{ url_for('static', filename='./images/USF-logo.jpg') }}" alt="logo" />
+    <a class="navbar-brand" href="/">USF Bulls Store</a>
+    <!-- Hamburger button for small screens -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <!-- About button -->
+        <li class="nav-item">
+          <a class="nav-link" href="/"><i class="fa fa-home"></i>Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/about">About</a>
+        </li>
+        {% if not 'user_info' in session %}
+        <!-- Sign In button -->
+        <li class="nav-item">
+          <a class="nav-link" href="/signin">Sign In</a>
+        </li>
+        {% endif %}
+        <!-- Sign In button -->
+        <li class="nav-item">
+          <a class="nav-link" href="/analytics">Analytics</a>
+        </li>
+        <!-- Cart button with icon -->
+        <li class="nav-item">
+          <a class="nav-link cart" href="/cart">
+            Cart <i class="fas fa-shopping-cart"></i>
+            <span class="item-count"></span>
+          </a>
+        </li>
+        {% if 'user_info' in session %}
+        <li class="nav-item">
+          <i class="fa fa-user-circle"></i>
+          <a class="nav-link">{{user[1]}}{{" "}}{{user[2]}}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container mt-5 pt-5">
+    <h1 class="text-center mb-5">About Us</h1>
+    <div class="row">
+      <!-- Team member cards -->
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <img src="{{ url_for('static', filename='./images/Hem.jpeg') }}" alt="head shots" class="card-img-top" />
+          <div class="card-body">
+            <h5 class="card-title">Hema Sai Ari</h5>
+            <p class="card-text">
+              Hema Sai Ari is Data Engineer with over 1 year of experience in
+              Information Technology industry. Currently pursuing a masters
+              degree in Business analytics and Information systems from the
+              University of South Florida. Hema Sai has worked as a Data
+              engineer at Centurion software solutions. Hema Sai is passionate
+              towards problem solving and he wants to use the knowledge he
+              gained from this course to solve real life problems. His
+              contribution includes website designing, brainstorming for
+              website, coding the html and css tags for styling and designing
+              the website pages.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <img src="{{ url_for('static', filename='./images/Shashank.jpg') }}" alt="head shots" class="card-img-top" />
+          <div class="card-body">
+            <h5 class="card-title">Shashank Raju</h5>
+            <p class="card-text">
+              Shashank is a systems engineer with 3 years of experience in
+              software industry. Currently pursuing a Master's in Business
+              Analytics and Information Systems from the University of South
+              Florida. Shashank has worked as an Associate Software Engineer
+              at Cognizant and provided level-2 technical support as a
+              Programmer Analyst. Shashank is a strong communicator and is
+              passionate about continuous learning and helping others achieve
+              their learning outcomes. His contributions include in
+              brainstorming the idea for the website designing and styling the
+              pages in the project.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <img src="{{ url_for('static', filename='./images/Venkatesh_B.jpg') }}" alt="head shots"
+            class="card-img-top" />
+          <div class="card-body">
+            <h5 class="card-title">Venkatesh Boddupalli</h5>
+            <p class="card-text">
+              Venkatesh is a Business Development Manager with 4.5 years of
+              experience in edutech industry. Currently pursuing a Master's in
+              Business Analytics and Information Systems from the University
+              of South Florida. Venkatesh has worked through multiple
+              heirarchies ranging from an Associate to manager at Think and
+              Learn pvt Ltd. and provided revenue boost up through strategic
+              planning and analysis. Venkatesh has a passion for business and
+              technology and is evident in his pursuit of higher education and
+              hands-on experience. His contributions to the project include
+              creating and styling the project's pages and coming up with
+              ideas for the website.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <img src="{{ url_for('static', filename='./images/gui.jpeg') }}" alt="head shots" class="card-img-top" />
+          <div class="card-body">
+            <h5 class="card-title">Guilherme Martins Arfelli</h5>
+            <p class="card-text">
+              Gui graduates from the University of South Florida in May of
+              2023 with a MS-BAIS degree. His hobbies are coding in python,
+              cooking, and playing tennis. He currently has an internship at
+              AdventHealth and will start full-time after graduation. His
+              contributions includes writing code in HTML and CSS for the
+              products section to make sure they are displayed as intended.Adding the Java script and using frame work
+              to make the page more responsive and interactive
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="github-button">
+      <button class="btn github" id="github-btn" title="click here to open Github repository"
+        onclick="window.open('https://github.com/Hema-Sai-Ari/USF-BULL-STORE', '_blank')">
+        GitHub
+      </button>
+    </div>
+  </main>
+
+  <footer class="bg-success py-3">
+    <div class="container text-center">
+      <p class="mb-0 text-white">&copy; 2023 USF Bulls Store</p>
+    </div>
+  </footer>
+</body>
+
+</html>
