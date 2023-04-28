@@ -242,9 +242,9 @@
         $.ajax({
           url: '/checkout',
           type: 'POST',
-          data: { /* any data you want to send to the backend */ },
+          data: { /* we can add any data you want to send to the backend */ },
           success: function(response) {
-            // Handle the response from the backend here
+            // Handles the response from the backend here
             location.reload();
           },
           error: function(error) {
@@ -253,7 +253,7 @@
         });
       };
       $('#closeModalButton').on('click', function() {
-        // Call the makeAjaxRequest function when the modal is closed
+        // Calling the makeAjaxRequest function when the modal is closed
         makeAjaxRequest();
       });
     </script>
