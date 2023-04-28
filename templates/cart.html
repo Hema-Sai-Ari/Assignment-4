@@ -1,137 +1,262 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cart</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-  <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+      .content {
+        flex: 1;
+      }
 
-    .content {
-      flex: 1;
-    }
+      .nav-item {
+        display: flex;
+        align-items: center;
+      }
 
-    .nav-item {
-      display: flex;
-      align-items: center;
-    }
+      .logo {
+        float: left;
+        height: 50px;
+        padding: 5px 5px 5px 16px;
+      }
 
-    .logo {
-      float: left;
-      height: 50px;
-      padding: 5px 5px 5px 16px;
-    }
+      .navbar-dark .navbar-nav .nav-link {
+        color: aliceblue;
+      }
+    </style>
+  </head>
 
-    .navbar-dark .navbar-nav .nav-link {
-      color: aliceblue;
-    }
-  </style>
-</head>
-
-<body>
-  <nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top">
-    <!-- USF Bulls Store brand -->
-    <img class="logo" src="{{ url_for('static', filename='./images/USF-logo.jpg') }}" alt="logo" />
-    <a class="navbar-brand" href="/">USF Bulls Store</a>
-    <!-- Hamburger button for small screens -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ml-auto">
-        <!-- About button -->
-        <li class="nav-item">
-          <a class="nav-link" href="/"><i class="fa fa-home"></i>Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/about">About</a>
-        </li>
-        {% if not 'user_info' in session %}
-        <!-- Sign In button -->
-        <li class="nav-item">
-          <a class="nav-link" href="/signin">Sign In</a>
-        </li>
-        {% endif %}
-        <!-- Sign In button -->
-        <li class="nav-item">
-          <a class="nav-link" href="/analytics">Analytics</a>
-        </li>
-        <!-- Cart button with icon -->
-        <li class="nav-item">
-          <a class="nav-link cart" href="/cart">
-            Cart <i class="fas fa-shopping-cart"></i>
-            <span class="item-count"></span>
-          </a>
-        </li>
-        {% if 'user_info' in session %}
-        <li class="nav-item">
-          <i class="fa fa-user-circle"></i>
-          <a class="nav-link">{{user[1]}}{{" "}}{{user[2]}}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('logout') }}" class="nav-link">Logout</a>
-        </li>
-        {% endif %}
-      </ul>
-    </div>
-  </nav>
-
-  <section class="container mt-5 pt-5 content">
-    <h2>Your Cart</h2>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Price</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in cart_items %}
-        {% if loop.index is odd %}
-        <tr>
-          {% else %}
-        <tr class="bg-light">
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top">
+      <!-- USF Bulls Store brand -->
+      <img
+        class="logo"
+        src="{{ url_for('static', filename='./images/USF-logo.jpg') }}"
+        alt="logo"
+      />
+      <a class="navbar-brand" href="/">USF Bulls Store</a>
+      <!-- Hamburger button for small screens -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <!-- About button -->
+          <li class="nav-item">
+            <a class="nav-link" href="/"><i class="fa fa-home"></i>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
+          {% if not 'user_info' in session %}
+          <!-- Sign In button -->
+          <li class="nav-item">
+            <a class="nav-link" href="/signin">Sign In</a>
+          </li>
           {% endif %}
-          <td>{{ item[2] }}</td>
-          <td>${{ item[4] }}0</td>
-          <td>
-            <form action="/remove_item" method="POST">
-              <input type="hidden" name="item_id" value="{{ item[0] }}">
-              <button type="submit" class="btn btn-danger btn-sm remove-btn" data-index="item[0]">Remove</button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
-        <tr>
-          <td colspan="2">Total:</td>
-          <td>${{ total_price }}0</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="checkout-btn-container d-flex justify-content-end mt-3">
-      <button class="btn btn-success" id="checkout-btn">Checkout</button>
+          <!-- Sign In button -->
+          <li class="nav-item">
+            <a class="nav-link" href="/analytics">Analytics</a>
+          </li>
+          <!-- Cart button with icon -->
+          <li class="nav-item">
+            <a class="nav-link cart" href="/cart">
+              Cart <i class="fas fa-shopping-cart"></i>
+              <span class="item-count"></span>
+            </a>
+          </li>
+          {% if 'user_info' in session %}
+          <li class="nav-item">
+            <i class="fa fa-user-circle"></i>
+            <a class="nav-link">{{user[1]}}{{" "}}{{user[2]}}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}" class="nav-link"
+              >Logout</a
+            >
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+
+    <section class="container mt-5 pt-5 content">
+      <h2>Your Cart</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in cart_items %} {% if loop.index is odd %}
+          <tr>
+            {% else %}
+          </tr>
+
+          <tr class="bg-light">
+            {% endif %}
+            <td>{{ item[2] }}</td>
+            <td>${{ item[4] }}0</td>
+            <td>
+              <form action="/remove_item" method="POST">
+                <input type="hidden" name="item_id" value="{{ item[0] }}" />
+                <button
+                  type="submit"
+                  class="btn btn-danger btn-sm remove-btn"
+                  data-index="item[0]"
+                >
+                  Remove
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="2">Total:</td>
+            <td>${{ total_price }}0</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="checkout-btn-container d-flex justify-content-end mt-3">
+          <button
+            type="submit"
+            class="btn btn-success"
+            id="checkout-btn"
+            data-toggle="modal"
+            data-target="#invoiceModal"
+          >
+            Checkout
+          </button>
+      </div>
+    </section>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="invoiceModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="invoiceModalLabel"
+      aria-hidden="true"
+      data-backdrop="static" data-keyboard="false"
+    >
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="invoiceModalLabel">Invoice</h5>
+            <button
+            id="closeModalButton"
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <div class="row">
+                {% if 'user_info' in session %}
+                <div class="col-md-6 text-right">
+                  <h4>{{user[1]}}{{" "}}{{user[2]}}</h4>
+                  <p>{{user[4]}}</p>
+                </div>
+                {% endif %}
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for item in cart_items %} {% if loop.index is odd %}
+                      <tr>
+                        {% else %}
+                      </tr>
+
+                      <tr class="bg-light">
+                        {% endif %}
+                        <td>{{ item[2] }}</td>
+                        <td>${{ item[4] }}0</td>
+                        <td>${{ item[4] }}0</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <th colspan="2">Total</th>
+                        <td>${{ total_price }}0</td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </section>
 
-  <footer class="bg-success py-3">
-    <div class="container text-center">
-      <p class="mb-0 text-white">&copy; 2023 USF Bulls Store</p>
-    </div>
-  </footer>
+    <footer class="bg-success py-3">
+      <div class="container text-center">
+        <p class="mb-0 text-white">&copy; 2023 USF Bulls Store</p>
+      </div>
+    </footer>
 
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-</body>
-
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      function makeAjaxRequest() {
+        $.ajax({
+          url: '/checkout',
+          type: 'POST',
+          data: { /* any data you want to send to the backend */ },
+          success: function(response) {
+            // Handle the response from the backend here
+            location.reload();
+          },
+          error: function(error) {
+            console.log(error);
+          }
+        });
+      };
+      $('#closeModalButton').on('click', function() {
+        // Call the makeAjaxRequest function when the modal is closed
+        makeAjaxRequest();
+      });
+    </script>
+    
+  </body>
 </html>

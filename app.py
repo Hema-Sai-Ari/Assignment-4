@@ -157,6 +157,20 @@ def cart():
         return render_template('cart.html', logged_in=True, user=user, cart_items = cart_items, total_price = total_price)
     return redirect('/signin')
 
+@app.route('/checkout', methods=["GET", "POST"])
+def checkout():
+    print(f'asdfghtr')
+    user_info = session.get('user_info')
+    if user_info:
+        sqlite_connection = sqlite3.connect("shopping.db")
+        sqlite_cursor = sqlite_connection.cursor()
+        sqlite_cursor.execute('DELETE FROM Cart WHERE customer_id = ? ', (int(user_info), ))
+        sqlite_connection.commit()
+        sqlite_cursor.execute('SELECT * FROM Customer WHERE id = ? ', (int(user_info), ))
+        user = sqlite_cursor.fetchone()
+        return render_template('cart.html', user = user)
+    return jsonify(errorDeleting = True)
+
 @app.route('/analytics')
 def analytics():
     user_info = session.get('user_info')
